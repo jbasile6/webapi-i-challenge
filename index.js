@@ -43,7 +43,7 @@ server.get('/api/users/:id', (req, res) => {
 
 //POST
 server.post('/api/users', (req, res) => {
-    const useName = req.body.name;
+    const userName = req.body.name;
     const userBio = req.body.bio;
 
     if (!userName || !userBio) {
@@ -58,6 +58,23 @@ server.post('/api/users', (req, res) => {
             })
     }
 })
+
+server.delete('/api/users/:id', (req, res) => {
+    const id = req.params.id;
+  
+    db
+      .remove(id)
+      .then(deleted => {
+        if (!deleted) {
+            res.status(404).json({ message: "The user with the specified ID does not exist." });
+        } else {
+            res.status(204).end();
+        }
+      })
+      .catch(error => {
+        res.status(500).json({ error: "The user could not be removed" });
+      });
+  });
 
 
 
